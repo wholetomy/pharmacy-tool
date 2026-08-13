@@ -1,0 +1,105 @@
+services:
+
+  database:
+    image: mysql:8.4
+    container_name: pharmacy-tool-database
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE: pharmacy_tool
+      MYSQL_USER: pharmacy
+      MYSQL_PASSWORD: pharmacy_password
+      MYSQL_ROOT_PASSWORD: root_password
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d:ro
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: pharmacy-tool-backend
+
+    restart: unless-stopped
+
+    environment:
+      NODE_ENV: development
+      PORT: 8000
+
+      DB_HOST: database
+      DB_PORT: 3306
+      DB_NAME: pharmacy_tool
+      DB_USER: pharmacy
+      DB_PASSWORD: pharmacy_password
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+    depends_on:
+      database:
+        condition: service_healthy
+
+
+  agent:
+    build:
+      context: ./frontend/agent
+      dockerfile: Dockerfile
+
+    container_name: pharmacy-tool-agent
+
+    restart: unless-stopped
+
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - ./frontend/agent:/app
+      - /app/node_modules
+      - /app/.next
+
+    depends_on:
+      - backend
+
+
+  end-user:
+    build:
+      context: ./frontend/end-user
+      dockerfile: Dockerfile
+
+    container_name: pharmacy-tool-end-user
+
+    restart: unless-stopped
+
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+
+    ports:
+      - "3001:3000"
+
+    volumes:
+      - ./frontend/end-user:/app
+      - /app/node_modules
+      - /app/.next
+
+    depends_on:
+      - backend
