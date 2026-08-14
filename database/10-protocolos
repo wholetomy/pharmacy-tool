@@ -1,0 +1,25 @@
+CREATE TABLE Protocolo (
+  cod_protocolo BIGINT NOT NULL AUTO_INCREMENT,
+  numero_protocolo VARCHAR(255) NOT NULL,
+  nome_cliente VARCHAR(255) DEFAULT NULL,
+  nome_representante VARCHAR(255) DEFAULT NULL,
+  documento_cliente VARCHAR(255) DEFAULT NULL,
+  documento_representante VARCHAR(255) DEFAULT NULL,
+  telefone_cliente VARCHAR(255) DEFAULT NULL,
+  telefone_representante VARCHAR(255) DEFAULT NULL,
+  email_cliente VARCHAR(255) DEFAULT NULL,
+  email_representante VARCHAR(255) DEFAULT NULL,
+  zip_code_cliente VARCHAR(255) DEFAULT NULL,
+  zip_code_representante VARCHAR(255) DEFAULT NULL,
+  status VARCHAR(255) DEFAULT NULL,
+  motivo_cancelamento VARCHAR(255) DEFAULT NULL,
+  cod_usuario INT DEFAULT NULL,
+  data_validade_protocolo DATETIME DEFAULT NULL,
+  data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
+  data_alteracao DATETIME DEFAULT NULL,
+  cod_pais INT DEFAULT NULL,
+  numero_fatura VARCHAR(255) DEFAULT NULL,
+  lugar_de_compra INT DEFAULT NULL,
+  FOREIGN KEY (cod_pais) REFERENCES Paises(cod_pais),
+  FOREIGN KEY (cod_usuario) REFERENCES Usuarios(cod_usuario)
+)

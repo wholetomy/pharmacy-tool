@@ -1,0 +1,9 @@
+CREATE TABLE Bandeiras (
+    cod_bandeira INT PRIMARY KEY AUTO_INCREMENT,
+    nome_bandeira VARCHAR(255) UNIQUE NOT NULL,
+    ativo ENUM('Y', 'N') DEFAULT 'Y' NOT NULL,
+    cod_pais INT NOT NULL,
+    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+    data_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (cod_pais) REFERENCES Paises(cod_pais)
+);
