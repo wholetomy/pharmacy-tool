@@ -12,14 +12,15 @@ CREATE TABLE Protocolo (
   zip_code_cliente VARCHAR(255) DEFAULT NULL,
   zip_code_representante VARCHAR(255) DEFAULT NULL,
   status VARCHAR(255) DEFAULT NULL,
-  motivo_cancelamento VARCHAR(255) DEFAULT NULL,
+  cod_motivo_cancelamento VARCHAR(255) DEFAULT NULL,
   cod_usuario INT DEFAULT NULL,
   data_validade_protocolo DATETIME DEFAULT NULL,
-  data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP
+  data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
   data_alteracao DATETIME DEFAULT NULL,
   cod_pais INT DEFAULT NULL,
   numero_fatura VARCHAR(255) DEFAULT NULL,
   lugar_de_compra INT DEFAULT NULL,
   FOREIGN KEY (cod_pais) REFERENCES Paises(cod_pais),
-  FOREIGN KEY (cod_usuario) REFERENCES Usuarios(cod_usuario)
+  FOREIGN KEY (cod_usuario) REFERENCES Usuarios(cod_usuario),
+  FOREIGN KEY (cod_motivo_cancelamento) REFERENCES Motivos_Cancelamentos(cod_motivo_cancelamento)
 )
